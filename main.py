@@ -43,17 +43,31 @@ def creating_data_pdf():
 
 
 def create_pdf():
-    green_color_bg = colors.HexColor("#34a85399", hasAlpha=True)
     doc = SimpleDocTemplate("trying.pdf", leftMargin=0, topMargin=0)
     data = creating_data_pdf()
     row_heights = len(data) * [0.37 * cm]
-    row_heights[0] = 25
-    column_width = len(data[0])*[1.5 * cm]
+    row_heights[0] = 20
+    column_width = len(data[0])*[1.3 * cm]
     t = Table(data, column_width, row_heights)
-    t.setStyle(TableStyle([('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
-    ('BOX', (0, 0), (-1, -1), 0.25, colors.black), ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-    ('VALIGN', (0, 0), (-1, -1), 'MIDDLE')])) # set all table style
-    # set headers style
+    t.setStyle(TableStyle([('INNERGRID', (0, 0), (-1, -1), 0.25, colors.grey),
+    ('BOX', (0, 0), (-1, -1), 0.25, colors.grey), ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+    ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'), ('TOPPADDING', (0, 0), (-1, -1), 1), ('BOTTOMPADDING', (0, 0), (-1, -1), 1),
+    ('LEFTPADDING', (0, 0), (-1, -1), 1), ('RIGHTPADDING', (0, 0), (-1, -1), 1)])) # set all table style
+    fixtures_data_dct = creating_dct_fixtures()
+    amount_of_sport = len(list(fixtures_data_dct.keys()))
+    t.setStyle(TableStyle([('FONTSIZE', (0, 0), (amount_of_sport*3-1, 0), 15)])) # set headers style
+    for i in range(amount_of_sport):
+        t.setStyle(TableStyle([("SPAN", (i*3, 0), (i*3+1, 0))])) # merge header cells
+    start = 1
+    for i in fixtures_data_dct:
+        step = 99/max(fixtures_data_dct[i][1])
+        for j in range(len(fixtures_data_dct[i][1])):
+            transparency = round(fixtures_data_dct[i][1][j]*step)
+            green_color_bg = colors.HexColor(f"#34a853{transparency:02}", hasAlpha=True)
+            t.setStyle(TableStyle([("BACKGROUND", (start, j+1), (start, j+1), green_color_bg)]))
+        start += 3
+
+
 
     doc.build([t])
 
