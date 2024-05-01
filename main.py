@@ -15,7 +15,6 @@ def creating_dct_fixtures():
             dict_of_fixtures[i[0:-4]] = data
     return dict_of_fixtures
 
-
 def creating_data_pdf():
     fixtures_data_dct = creating_dct_fixtures()
     headers = []
