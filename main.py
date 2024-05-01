@@ -1,5 +1,5 @@
 from reportlab.platypus.tables import Table, TableStyle, colors
-from reportlab.lib.units import cm
+from reportlab.lib.units import cm, mm
 from reportlab.platypus import SimpleDocTemplate
 from reportlab.lib.pagesizes import B4
 from datetime import datetime
@@ -44,12 +44,12 @@ def creating_data_pdf():
 
 
 def create_pdf():
-    today = datetime.today().strftime('%d-%m-%Y')
-    doc = SimpleDocTemplate(f"fixture_{today}.pdf", leftMargin=20, topMargin=0, pagesize=B4)
     data = creating_data_pdf()
-    row_heights = len(data) * [0.37 * cm]
+    row_heights = len(data) * [3.7 * mm]
     row_heights[0] = 30
-    column_width = len(data[0]) * [1.4 * cm]
+    column_width = len(data[0]) * [14 * mm]
+    today = datetime.today().strftime('%d-%m-%Y')
+    doc = SimpleDocTemplate(f"fixture_{today}.pdf", leftMargin=((B4[0])-len(data[0])*14*mm)/2, topMargin=0, pagesize=B4)
     t = Table(data, column_width, row_heights)
     t.setStyle(TableStyle([('INNERGRID', (0, 0), (-1, -1), 0.25, colors.grey),
                            ('BOX', (0, 0), (-1, -1), 0.25, colors.grey), ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
@@ -64,10 +64,10 @@ def create_pdf():
         t.setStyle(TableStyle([("SPAN", (i * 3, 0), (i * 3 + 1, 0))]))  # merge header cells
     start = 1
     for i in fixtures_data_dct:
-        step = 99 / max(fixtures_data_dct[i][1])
+        step = 255 / max(fixtures_data_dct[i][1])
         for j in range(len(fixtures_data_dct[i][1])):
             transparency = round(fixtures_data_dct[i][1][j] * step)
-            green_color_bg = colors.HexColor(f"#34a853{transparency:02}", hasAlpha=True)
+            green_color_bg = colors.HexColor(f"#15b13e{transparency:02x}", hasAlpha=True)
             t.setStyle(TableStyle([("BACKGROUND", (start, j + 1), (start, j + 1), green_color_bg)]))
         start += 3
     doc.build([t])
