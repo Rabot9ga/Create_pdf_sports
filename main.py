@@ -45,7 +45,7 @@ def creating_data_pdf():
 
 def create_pdf():
     data = creating_data_pdf()
-    row_heights = len(data) * [3.7 * mm]
+    row_heights = len(data) * [3.5 * mm]
     row_heights[0] = 30
     column_width = len(data[0]) * [14 * mm]
     today = datetime.today().strftime('%d-%m-%Y')
