@@ -1,7 +1,6 @@
 from reportlab.platypus.tables import Table, TableStyle, colors
 from reportlab.lib.units import cm, mm
 from reportlab.platypus import SimpleDocTemplate
-from reportlab.lib.pagesizes import B4
 from datetime import datetime
 import pandas as pd
 import os
@@ -49,7 +48,7 @@ def create_pdf():
     row_heights[0] = 30
     column_width = len(data[0]) * [14 * mm]
     today = datetime.today().strftime('%d-%m-%Y')
-    doc = SimpleDocTemplate(f"fixture_{today}.pdf", leftMargin=((B4[0])-len(data[0])*14*mm)/2, topMargin=0, pagesize=B4)
+    doc = SimpleDocTemplate(f"fixture_{today}.pdf", leftMargin=(((250*mm,600*mm)[0])-len(data[0])*14*mm)/2, topMargin=0, pagesize=(250*mm,600*mm))
     t = Table(data, column_width, row_heights)
     t.setStyle(TableStyle([('INNERGRID', (0, 0), (-1, -1), 0.25, colors.grey),
                            ('BOX', (0, 0), (-1, -1), 0.25, colors.grey), ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
